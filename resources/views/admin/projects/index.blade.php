@@ -30,7 +30,8 @@
                             <i class="fa-solid fa-pen-to-square"></i>
                         </a>
                         <form class="d-inline-block" action="{{ route('admin.projects.destroy', $project->slug) }}"
-                            method="POST">
+                            method="POST"
+                            onsubmit="return confirm('Sei sicuro di voler eliminare questa risorsa?');">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger">
