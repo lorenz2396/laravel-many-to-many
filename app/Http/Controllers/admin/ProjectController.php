@@ -2,10 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
+//Models
 use App\Models\Project;
 use App\Models\Type;
+use App\Models\Technology;
+
 use Illuminate\Http\Request;
+
+//Controller
 use App\Http\Controllers\Controller;
+
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use Illuminate\Support\Str;
@@ -31,7 +37,8 @@ class ProjectController extends Controller
     public function create()
     {
         $types = Type::all();
-        return view('admin.projects.create', compact('types'));
+        $technologies = Technology::all();
+        return view('admin.projects.create', compact('types', 'technologies'));
     }
 
     /**
@@ -45,6 +52,9 @@ class ProjectController extends Controller
         $data = $request->validated();
         $data['slug'] = Str::slug($data['title']);
         $project = Project::create($data);
+        if ($request->has('technology_id')) {
+            $project->technologies()->attach($request->technology_id);
+        }
         return redirect()->route('admin.projects.index')->with('message', "{$project->title} è stato creato");
     }
 
@@ -68,7 +78,8 @@ class ProjectController extends Controller
     public function edit(Project $project)
     {
         $types = Type::all();
-        return view('admin.projects.edit', compact('project', 'types'));
+        $technologies = Technology::all();
+        return view('admin.projects.edit', compact('project', 'types', 'technologies'));
     }
 
     /**
@@ -80,9 +91,14 @@ class ProjectController extends Controller
      */
     public function update(UpdateProjectRequest $request, Project $project)
     {
-        $data = $request->all();
+        $data = $request->validated();
         $data['slug'] = Str::slug($data['title']);
         $project->update($data);
+        if ($request->has('technology_id')) {
+            $project->technologies()->sync($data['technology_id']);
+        } else {
+            $project->technologies()->detach();
+        };
         return redirect()->route('admin.projects.index')->with('message', "{$project->title} è stato modificato");
     }
 
@@ -94,6 +110,7 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
+        $project->technologies()->detach();
         $project->delete();
         return redirect()->route('admin.projects.index')->with('message', "{$project->title} è stato eliminato");
     }
