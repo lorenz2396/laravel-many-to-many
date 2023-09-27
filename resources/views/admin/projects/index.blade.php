@@ -21,6 +21,13 @@
                     <th scope="row">{{ $project->id }}</th>
                     <td>{{ $project->title }}</td>
                     <td>{{ $project->type?->name }}</td>
+                    <td>
+                        @forelse ($project->technologies as $technology)
+                            {{ $technology->name }} {{ $loop->last ? '' : ',' }}
+                        @empty
+                            <span>Nessuna tecnologia usata</span>
+                        @endforelse
+                    </td>
                     <td>{{ $project->slug }}</td>
                     <td>
                         <a href="{{ route('admin.projects.show', $project->slug) }}" class="btn btn-success">

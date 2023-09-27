@@ -13,6 +13,17 @@
                             {{ $project->content }}
                         </p>
 
+                        <h3>
+                            Tecnologie:
+                        </h3>
+                        <p>
+                            @forelse ($project->technologies as $technology)
+                                {{ $technology->name }} {{ $loop->last ? '' : ',' }}
+                            @empty
+                                <span>Nessuna tecnologia usata</span>
+                            @endforelse
+                        </p>
+
                         <div>
 
                             <a href="{{ route('admin.projects.edit', ['project' => $project->id]) }}" class="btn btn-warning">
