@@ -16,7 +16,12 @@ class TechnologySeeder extends Seeder
      */
     public function run()
     {
-        $technologies = ['Mathlab', 'Laravel', 'Javascript', 'Php'];
+        $technologies = [
+            'Python',
+            'Laravel',
+            'Javascript',
+            'Php'];
+
         foreach ($technologies as $tech_value) {
             $new_type = new Technology();
             $new_type->name = $tech_value;

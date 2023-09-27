@@ -16,7 +16,12 @@ class TypeSeeder extends Seeder
      */
     public function run()
     {
-        $types = ['Informatica', 'Ingegneria', 'Lettere', 'Scienze'];
+        $types = [
+            'Informatica',
+            'Ingegneria',
+            'Lettere',
+            'Medicina'
+        ];
         foreach ($types as $type_value) {
             $new_type = new Type();
             $new_type->name = $type_value;
